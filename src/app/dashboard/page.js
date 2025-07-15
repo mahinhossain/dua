@@ -50,7 +50,7 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 text-black">
-      <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-6"> Admin Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-blue-50 p-6 rounded-lg shadow-md">
@@ -123,7 +123,7 @@ export default function Dashboard() {
 
           {selectedPeriodTargets.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="min-w-full bg-white">
+              <table className="min-w-full bg-white text-left">
                 <thead>
                   <tr>
                     <th className="py-2 px-4 border-b">User</th>

@@ -1,4 +1,8 @@
-import { getTargets, addTarget, getTargetsByUserAndMonth } from "../../../../lib/data";
+import {
+  getTargets,
+  addTarget,
+  getTargetsByUserAndMonth,
+} from "../../../../lib/data";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
@@ -24,25 +28,38 @@ export async function GET(request) {
   }
 }
 
+// export async function POST(request) {
+//   try {
+//     const targetData = await request.json();
+
+//     // Basic validation
+//     if (!targetData.userId || !targetData.month || !targetData.year) {
+//       return NextResponse.json(
+//         { error: "userId, month, and year are required" },
+//         { status: 400 }
+//       );
+//     }
+
+//     const newTarget = addTarget(targetData);
+//     return NextResponse.json(newTarget, { status: 201 });
+//   } catch (error) {
+//     console.error("Error creating target:", error);
+//     return NextResponse.json(
+//       { error: error.message || "Failed to create target" },
+//       { status: 500 }
+//     );
+//   }
+// }
+// app/api/targets/route.js
 export async function POST(request) {
   try {
     const targetData = await request.json();
-
-    // Basic validation
-    if (!targetData.userId || !targetData.month || !targetData.year) {
-      return NextResponse.json(
-        { error: "userId, month, and year are required" },
-        { status: 400 }
-      );
-    }
-
     const newTarget = addTarget(targetData);
     return NextResponse.json(newTarget, { status: 201 });
   } catch (error) {
-    console.error("Error creating target:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to create target" },
-      { status: 500 }
+      { error: error.message || "Failed to create/update target" },
+      { status: 400 } // Or 409 for conflict if using Option 1
     );
   }
 }

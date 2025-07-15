@@ -1,26 +1,22 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   Home, 
   Users, 
-  Plus, 
-  Settings, 
-  ChevronUp,
-  BarChart2,
-  UserPlus
+  UserPlus, 
+  BarChart2, 
+  Settings 
 } from 'react-feather';
 
-export default function FabMenu() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function BottomNavigationBar() {
   const pathname = usePathname();
 
   const menuItems = [
     {
       icon: <Home size={20} />,
-      label: 'Dashboard',
+      label: 'Home',
       href: '/dashboard',
       active: pathname === '/dashboard',
     },
@@ -32,7 +28,7 @@ export default function FabMenu() {
     },
     {
       icon: <UserPlus size={20} />,
-      label: 'Create User',
+      label: 'Add',
       href: '/dashboard/users/create',
       active: pathname === '/dashboard/users/create',
     },
@@ -51,39 +47,19 @@ export default function FabMenu() {
   ];
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      {/* Menu Items */}
-      <div 
-        className={`flex flex-col items-end gap-4 mb-4 transition-all duration-300 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
-      >
-        {menuItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`flex items-center gap-2 px-4 py-3 rounded-full shadow-lg ${item.active ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
-            onClick={() => setIsOpen(false)}
-          >
-            <span className="text-sm font-medium">{item.label}</span>
-            <span className="flex items-center justify-center">
-              {item.icon}
-            </span>
-          </Link>
-        ))}
-      </div>
-
-      
-      {/* Main FAB Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center justify-center w-14 h-14 rounded-full shadow-lg ${isOpen ? 'bg-blue-500 text-white rotate-45' : 'bg-blue-600 text-white'} transition-all duration-300`}
-        aria-label="Toggle menu"
-      >
-        {isOpen ? (
-          <ChevronUp size={24} />
-        ) : (
-          <Plus size={24} />
-        )}
-      </button>
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-md flex justify-around items-center h-16 ">
+      {menuItems.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className={`flex flex-col items-center justify-center text-xs ${
+            item.active ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <div>{item.icon}</div>
+          <span className="text-[10px] mt-1">{item.label}</span>
+        </Link>
+      ))}
     </div>
   );
 }

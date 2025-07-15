@@ -1,0 +1,16 @@
+[
+  {
+    "name": "mahin",
+    "email": "jynoh@mailinator.com",
+    "role": "user",
+    "id": "1752570294167",
+    "createdAt": "2025-07-15T09:04:54.167Z"
+  },
+  {
+    "name": "rakib",
+    "email": "pulolo@mailinator.com",
+    "role": "admin",
+    "id": "1752570306345",
+    "createdAt": "2025-07-15T09:05:06.345Z"
+  }
+]
