@@ -3,6 +3,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import React, { useEffect } from "react";
 
+
 export default function RootLayout({ children }) {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
