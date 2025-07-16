@@ -1,10 +1,23 @@
-
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 
 const Dua = () => {
   // দোয়ার লিস্ট
   const duas = [
+    {
+      id: 12,
+      name: "আউজুবিল্লাহি মিনাশ শাইতানির রাজিম",
+      arabic: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
+      transliteration: "A'udhu billahi min ash-shaytan ir-rajim",
+      meaning: "আমি বিতাড়িত শয়তান থেকে আল্লাহর আশ্রয় প্রার্থনা করছি",
+    },
+    {
+      id: 13,
+      name: "বিসমিল্লাহির রাহমানির রাহিম",
+      arabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+      transliteration: "Bismillahir Rahmanir Rahim",
+      meaning: "পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে শুরু করছি",
+    },
     {
       id: 1,
       name: "দরুদ শরীফ",
@@ -83,20 +96,7 @@ const Dua = () => {
       transliteration: "Rabbana atina fid-dunya hasanah",
       meaning: "হে আমাদের রব, আমাদের দুনিয়াতে কল্যাণ দান করুন",
     },
-    {
-      id: 12,
-      name: "আউজুবিল্লাহি মিনাশ শাইতানির রাজিম",
-      arabic: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
-      transliteration: "A'udhu billahi min ash-shaytan ir-rajim",
-      meaning: "আমি বিতাড়িত শয়তান থেকে আল্লাহর আশ্রয় প্রার্থনা করছি",
-    },
-    {
-      id: 13,
-      name: "বিসমিল্লাহির রাহমানির রাহিম",
-      arabic: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
-      transliteration: "Bismillahir Rahmanir Rahim",
-      meaning: "পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে শুরু করছি",
-    },
+
     {
       id: 14,
       name: "হাসবুনাল্লাহু ওয়া নিইমাল ওয়াকিল",
@@ -787,7 +787,7 @@ const Dua = () => {
                 </span>
               </div>
 
-              <p className="text-right text-2xl mb-4 font-arabic">
+              <p className="text-right text-2xl mb-4 font-arabic text-black">
                 {dua.arabic}
               </p>
 
