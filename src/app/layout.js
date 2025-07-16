@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import React, { useEffect } from "react";
 import Head from "next/head";
 
+
 export default function RootLayout({ children }) {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
