@@ -34,6 +34,7 @@ export default function Dashboard() {
     (t) => t.month == selectedMonth && t.year == selectedYear
   );
 
+  console.log("currentMonthTargets", currentMonthTargets);
   const chartData = currentMonthTargets.map((target) => {
     const user = users.find((u) => u._id === target.userId);
     return {
@@ -43,6 +44,7 @@ export default function Dashboard() {
     };
   });
 
+  console.log("chartData", chartData);
   const chartOptions = {
     labels: chartData.map((d) => d.name),
     colors: ["#4CAF50", "#2196F3", "#FFC107", "#9C27B0", "#607D8B"],
@@ -134,6 +136,7 @@ export default function Dashboard() {
                     <th className="px-6 py-4 text-left">Target</th>
                     <th className="px-6 py-4 text-left">Achievement</th>
                     <th className="px-6 py-4 text-left">Progress</th>
+                    <th className="px-6 py-4 text-left">Charts</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -161,6 +164,31 @@ export default function Dashboard() {
                           >
                             {percentage}%
                           </span>
+                        </td>
+                        <td>
+                          {/* Individual user chart: show a small donut chart for achievement vs target */}
+                          {target.target > 0 ? (
+                            <PieChart
+                              options={{
+                                labels: ["Achieved", "Remaining"],
+                                colors: ["red", "green"], // green for achieved, red for remaining
+                                legend: { show: false },
+                                dataLabels: { enabled: true },
+                                chart: { type: "pie" },
+                              }}
+                              series={[
+                                Math.min(target.achievement, target.target),
+                                Math.max(target.target - target.achievement, 0),
+                              ]}
+                              type="pie"
+                              width={180}
+                              height={180}
+                            />
+                          ) : (
+                            <span className="text-gray-400 text-xs">
+                              No target
+                            </span>
+                          )}
                         </td>
                       </tr>
                     );

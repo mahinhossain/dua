@@ -1,6 +1,7 @@
 import User from "../models/User";
+import Target from "../models/TargetModel";
 import bcrypt from "bcrypt";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 export async function createUser(userData) {
   // return userData;
@@ -17,12 +18,12 @@ export async function getUsers() {
 
 export async function getUserById(id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error('Invalid user ID');
+    throw new Error("Invalid user ID");
   }
 
   const user = await User.findById(id);
   if (!user) {
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 
   return user;
@@ -38,6 +39,8 @@ export async function updateUser(id, userData) {
 }
 
 export async function deleteUser(id) {
+  const userId = id;
+  await Target.deleteMany({ userId });
   return await User.findByIdAndDelete(id);
 }
 

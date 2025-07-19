@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -27,6 +31,32 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
+  const handleDelete = async (userId) => {
+    // Show confirmation dialog
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+
+    if (!confirmed) return;
+    setIsDeleting(userId);
+
+    try {
+      const response = await fetch(`/api/user1/${userId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete user");
+      }
+
+      toast.success("User deleted successfully");
+      router.refresh(); // Refresh the page to show updated list
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsDeleting(null);
+    }
+  };
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -113,12 +143,8 @@ export default function UsersPage() {
                     <button
                       className="text-red-600 hover:text-red-900"
                       onClick={() => {
-                        // Add delete functionality here
-                        if (
-                          confirm("Are you sure you want to delete this user?")
-                        ) {
-                          // Handle delete
-                        }
+                        // Handle delete
+                        handleDelete(user._id);
                       }}
                     >
                       Delete
