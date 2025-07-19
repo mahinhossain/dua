@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import {duas}  from "./duaData";
+import { duas } from "./duaData";
 const Dua = () => {
   // দোয়ার লিস্ট
   // const duas = [
@@ -721,7 +721,7 @@ const Dua = () => {
 
   // স্টেটে কাউন্টার ডেটা রাখা
   const [counters, setCounters] = useState({});
-  console.log("duas", duas);
+
   // কম্পোনেন্ট মাউন্ট হলে লোকাল স্টোরেজ থেকে ডেটা লোড করা
   useEffect(() => {
     const savedCounters = JSON.parse(localStorage.getItem("duaCounters")) || {};

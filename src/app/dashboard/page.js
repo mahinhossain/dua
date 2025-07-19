@@ -13,11 +13,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const usersRes = await fetch("/api/users");
+      const usersRes = await fetch("/api/user1");
       const usersData = await usersRes.json();
       setUsers(usersData);
 
-      const targetsRes = await fetch("/api/targets");
+      const targetsRes = await fetch("/api/targets1");
       const targetsData = await targetsRes.json();
       setTargets(targetsData);
     };
@@ -35,7 +35,7 @@ export default function Dashboard() {
   );
 
   const chartData = currentMonthTargets.map((target) => {
-    const user = users.find((u) => u.id === target.userId);
+    const user = users.find((u) => u._id === target.userId);
     return {
       name: user?.name || "Unknown",
       value: parseInt(target.achievement),
@@ -97,11 +97,14 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">View Previous Months</h2>
-          <div className="flex gap-4 mb-6">
+        <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            📅 View Previous Months
+          </h2>
+
+          <div className="flex flex-wrap items-center gap-4 mb-8">
             <select
-              className="px-3 py-2 border rounded-lg"
+              className="px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
             >
@@ -115,40 +118,49 @@ export default function Dashboard() {
             </select>
             <input
               type="number"
-              className="px-3 py-2 border rounded-lg"
+              className="px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
+              placeholder="Enter year"
             />
           </div>
 
           {selectedPeriodTargets.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white text-left">
-                <thead>
+            <div className="overflow-x-auto rounded-lg border">
+              <table className="min-w-full text-sm text-gray-800">
+                <thead className="bg-gray-100 text-xs font-semibold uppercase tracking-wide text-gray-600">
                   <tr>
-                    <th className="py-2 px-4 border-b">User</th>
-                    <th className="py-2 px-4 border-b">Target</th>
-                    <th className="py-2 px-4 border-b">Achievement</th>
-                    <th className="py-2 px-4 border-b">Percentage</th>
+                    <th className="px-6 py-4 text-left">User</th>
+                    <th className="px-6 py-4 text-left">Target</th>
+                    <th className="px-6 py-4 text-left">Achievement</th>
+                    <th className="px-6 py-4 text-left">Progress</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {selectedPeriodTargets.map((target) => {
-                    const user = users.find((u) => u.id === target.userId);
+                <tbody className="divide-y divide-gray-200">
+                  {selectedPeriodTargets.map((target, i) => {
+                    const user = users.find((u) => u._id === target.userId);
+                    const percentage = Math.round(
+                      (target.achievement / target.target) * 100
+                    );
+
                     return (
-                      <tr key={target.id}>
-                        <td className="py-2 px-4 border-b">
-                          {user?.name || "Unknown"}
-                        </td>
-                        <td className="py-2 px-4 border-b">{target.target}</td>
-                        <td className="py-2 px-4 border-b">
-                          {target.achievement}
-                        </td>
-                        <td className="py-2 px-4 border-b">
-                          {Math.round(
-                            (target.achievement / target.target) * 100
-                          )}
-                          %
+                      <tr
+                        key={i}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="px-6 py-4">{user?.name || "Unknown"}</td>
+                        <td className="px-6 py-4">{target.target}</td>
+                        <td className="px-6 py-4">{target.achievement}</td>
+                        <td className="px-6 py-4">
+                          <span
+                            className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                              percentage >= 100
+                                ? "bg-green-100 text-green-700"
+                                : "bg-blue-100 text-blue-700"
+                            }`}
+                          >
+                            {percentage}%
+                          </span>
                         </td>
                       </tr>
                     );
@@ -157,7 +169,9 @@ export default function Dashboard() {
               </table>
             </div>
           ) : (
-            <p>No data available for selected period</p>
+            <p className="text-gray-500 mt-4">
+              No data available for selected period.
+            </p>
           )}
         </div>
       </div>

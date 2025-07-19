@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
-// Dynamically import the chart to avoid SSR issues
 const PieChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export default function UserDetail({ params }) {
+  // const userId = params.id;
+  const { id: userId } = use(params);
+
   const [user, setUser] = useState(null);
   const [targets, setTargets] = useState([]);
   const [formData, setFormData] = useState({
@@ -20,36 +22,38 @@ export default function UserDetail({ params }) {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [loader, setLoader] = useState(false);
   const router = useRouter();
-
+  console.log("userId", userId);
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await fetch(`/api/users/${params.id}`);
+      const res = await fetch(`/api/user1/${userId}`);
       const data = await res.json();
       setUser(data);
     };
 
     const fetchTargets = async () => {
       const res = await fetch(
-        `/api/targets?userId=${params.id}&month=${selectedMonth}&year=${selectedYear}`
+        `/api/targets1?userId=${userId}&month=${selectedMonth}&year=${selectedYear}`
       );
       const data = await res.json();
       setTargets(data);
     };
 
-    fetchUser();
-    fetchTargets();
-  }, [params.id, selectedMonth, selectedYear, loader]);
+    if (userId) {
+      fetchUser();
+      fetchTargets();
+    }
+  }, [userId, selectedMonth, selectedYear, loader]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-    const response = await fetch("/api/targets", {
+    const response = await fetch("/api/targets1", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId: params.id,
+        userId,
         ...formData,
       }),
     });
@@ -66,7 +70,7 @@ export default function UserDetail({ params }) {
     setLoader(false);
   };
 
-  if (!user) return <div>Loading...</div>;
+  if (!user) return <div className="text-red-500">Loading...</div>;
 
   const currentMonthTarget = targets.find(
     (t) =>
@@ -158,7 +162,7 @@ export default function UserDetail({ params }) {
               />
             </div>
             {loader ? (
-              <h1>Loading......</h1>
+              <h1>Loading...</h1>
             ) : (
               <button
                 type="submit"
@@ -241,8 +245,8 @@ export default function UserDetail({ params }) {
                 </tr>
               </thead>
               <tbody>
-                {targets.map((target) => (
-                  <tr key={target.id}>
+                {targets.map((target,i) => (
+                  <tr key={i}>
                     <td className="py-2 px-4 border-b text-center">
                       {new Date(
                         target.year,

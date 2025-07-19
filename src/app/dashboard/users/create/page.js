@@ -18,7 +18,7 @@ export default function CreateUser() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/users", {
+      const response = await fetch("/api/user1", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

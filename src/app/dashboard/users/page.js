@@ -11,7 +11,7 @@ export default function UsersPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/users");
+        const response = await fetch("/api/user1");
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
@@ -76,7 +76,7 @@ export default function UsersPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
+                <tr key={user._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
@@ -105,7 +105,7 @@ export default function UsersPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <Link
-                      href={`/dashboard/users/${user.id}`}
+                      href={`/dashboard/users/${user._id}`}
                       className="text-blue-600 hover:text-blue-900 mr-4"
                     >
                       View
