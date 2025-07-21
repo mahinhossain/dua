@@ -30,7 +30,7 @@ export default function Dashboard() {
 
         const usersData = await usersRes.json();
         const targetsData = await targetsRes.json();
-
+        console.log("targetsData", targetsData);
         setUsers(usersData);
         setTargets(targetsData);
       } catch (error) {
@@ -60,7 +60,7 @@ export default function Dashboard() {
       target: parseInt(target.target),
     };
   });
-
+  console.log("targets", targets);
   const chartOptions = {
     labels: chartData.map((d) => d.name),
     colors: ["#4F46E5", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"],
@@ -118,7 +118,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900">
             Performance Dashboard
           </h1>
           <p className="text-gray-600 mt-2">
@@ -187,7 +187,7 @@ export default function Dashboard() {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-8">
           {/* Performance Chart */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex justify-between items-center mb-6">
@@ -206,7 +206,7 @@ export default function Dashboard() {
                 <PieChart
                   options={chartOptions}
                   series={chartData.map((d) => d.value)}
-                  type="donut"
+                  type="pie"
                   height="100%"
                   width="100%"
                 />
@@ -220,7 +220,7 @@ export default function Dashboard() {
           </div>
 
           {/* Historical Data */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-black">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-semibold text-gray-900">
                 Historical Performance
@@ -340,32 +340,32 @@ export default function Dashboard() {
                                 </div>
                               </div>
                               {target.target > 0 && (
-                                <div className="w-16 h-16">
+                                <div className=" mx-auto   flex items-center justify-center">
                                   <PieChart
                                     options={{
+                                      chart: {
+                                        type: "pie",
+                                        background: "transparent",
+                                      },
                                       labels: ["Achieved", "Remaining"],
-                                      colors: ["#10B981", "#E5E7EB"],
-                                      legend: { show: false },
-                                      dataLabels: { enabled: false },
-                                      chart: { type: "donut" },
-                                      plotOptions: {
-                                        pie: {
-                                          donut: {
-                                            size: "70%",
-                                            labels: {
-                                              show: true,
-                                              total: {
-                                                show: true,
-                                                showAlways: true,
-                                                formatter: function () {
-                                                  return percentage + "%";
-                                                },
-                                                color: "#374151",
-                                                fontSize: "12px",
-                                                fontFamily: "Inter, sans-serif",
-                                              },
-                                            },
-                                          },
+                                      colors: ["#10B981", "#EF4444"], // Tailwind green-500 and red-500
+                                      legend: {
+                                        show: true,
+                                        position: "bottom",
+                                        fontSize: "10px",
+                                        fontFamily: "Inter, sans-serif",
+                                      },
+                                      dataLabels: {
+                                        enabled: true,
+                                        style: {
+                                          fontSize: "10px",
+                                          fontFamily: "Inter, sans-serif",
+                                        },
+                                      },
+                                      tooltip: {
+                                        enabled: true,
+                                        y: {
+                                          formatter: (val) => `${val} units`,
                                         },
                                       },
                                     }}
@@ -379,7 +379,7 @@ export default function Dashboard() {
                                         0
                                       ),
                                     ]}
-                                    type="donut"
+                                    type="pie"
                                     width="100%"
                                     height="100%"
                                   />

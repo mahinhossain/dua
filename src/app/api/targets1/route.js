@@ -12,12 +12,16 @@ export async function GET(request) {
     const month = searchParams.get("month");
     const year = searchParams.get("year");
 
+    const allTargets = await getTargets();
+    const userTargets = allTargets.filter((t) => t.userId === userId);
     if (userId && month && year) {
       const targets = await getTargetsByUserAndMonth(userId, month, year);
-      return NextResponse.json(targets);
+      return NextResponse.json({
+        currentTargets: targets,
+        allTargets: userTargets,
+      });
     }
 
-    const allTargets = await getTargets();
     return NextResponse.json(allTargets);
   } catch (error) {
     console.error("Error fetching targets11:", error);
@@ -29,9 +33,7 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-
   const targetData = await request.json();
   const newTarget = await addTarget(targetData);
   return NextResponse.json(newTarget, { status: 201 });
- 
 }

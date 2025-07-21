@@ -29,7 +29,7 @@ export default function UsersPage() {
     };
 
     fetchUsers();
-  }, []);
+  }, [isDeleting]);
 
   const handleDelete = async (userId) => {
     // Show confirmation dialog

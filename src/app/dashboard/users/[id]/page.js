@@ -3,6 +3,7 @@
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+const BarChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const PieChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -12,6 +13,7 @@ export default function UserDetail({ params }) {
 
   const [user, setUser] = useState(null);
   const [targets, setTargets] = useState([]);
+  const [allTargets, setAllTargets] = useState([]);
   const [formData, setFormData] = useState({
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),
@@ -35,7 +37,8 @@ export default function UserDetail({ params }) {
         `/api/targets1?userId=${userId}&month=${selectedMonth}&year=${selectedYear}`
       );
       const data = await res.json();
-      setTargets(data);
+      setTargets(data.currentTargets);
+      setAllTargets(data.allTargets);
     };
 
     if (userId) {
@@ -91,9 +94,72 @@ export default function UserDetail({ params }) {
 
   const chartOptions = {
     labels: ["Achieved", "Remaining"],
-    colors: ["#4CAF50", "#F44336"],
+    colors: ["green", "red"],
   };
-
+  console.log("targets", targets);
+  const barChartData = {
+    options: {
+      chart: {
+        type: "bar",
+        height: 350,
+        toolbar: {
+          show: true,
+        },
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "15%",
+          endingShape: "rounded",
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 1,
+        colors: ["transparent"],
+      },
+      xaxis: {
+        categories: allTargets.map((target) =>
+          new Date(target.year, target.month - 1, 1).toLocaleString("default", {
+            month: "short",
+            year: "numeric",
+          })
+        ),
+      },
+      yaxis: {
+        title: {
+          text: "Amount",
+        },
+      },
+      fill: {
+        opacity: 1,
+      },
+      colors: ["red", "green"],
+      legend: {
+        position: "top",
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val;
+          },
+        },
+      },
+    },
+    series: [
+      {
+        name: "Target",
+        data: allTargets.map((target) => target.target),
+      },
+      {
+        name: "Achievement",
+        data: allTargets.map((target) => target.achievement),
+      },
+    ],
+  };
   return (
     <div className="p-6 text-black">
       <h1 className="text-2xl font-bold mb-6">{user.name} Dashboard</h1>
@@ -211,7 +277,7 @@ export default function UserDetail({ params }) {
 
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">View Previous Months</h2>
-        <div className="flex gap-4 mb-6">
+        {/* <div className="flex gap-4 mb-6">
           <select
             className="px-3 py-2 border rounded-lg"
             value={selectedMonth}
@@ -231,48 +297,93 @@ export default function UserDetail({ params }) {
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
           />
-        </div>
+        </div> */}
 
-        {targets.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white">
-              <thead>
+        {allTargets.length > 0 ? (
+          <div className="overflow-x-auto rounded-lg shadow-md">
+            <table className="min-w-full bg-white divide-y divide-gray-200">
+              <thead className="bg-blue-600 text-white">
                 <tr>
-                  <th className="py-2 px-4 border-b">Month</th>
-                  <th className="py-2 px-4 border-b">Target</th>
-                  <th className="py-2 px-4 border-b">Achievement</th>
-                  <th className="py-2 px-4 border-b">Percentage</th>
+                  <th className="py-3 px-6 text-sm font-semibold text-left">
+                    Month
+                  </th>
+                  <th className="py-3 px-6 text-sm font-semibold text-left">
+                    Target
+                  </th>
+                  <th className="py-3 px-6 text-sm font-semibold text-left">
+                    Achievement
+                  </th>
+                  <th className="py-3 px-6 text-sm font-semibold text-left">
+                    Percentage
+                  </th>
                 </tr>
               </thead>
-              <tbody>
-                {targets.map((target,i) => (
-                  <tr key={i}>
-                    <td className="py-2 px-4 border-b text-center">
-                      {new Date(
-                        target.year,
-                        target.month - 1,
-                        1
-                      ).toLocaleString("default", {
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </td>
-                    <td className="py-2 px-4 border-b text-center">
-                      {target.target}
-                    </td>
-                    <td className="py-2 px-4 border-b text-center">
-                      {target.achievement}
-                    </td>
-                    <td className="py-2 px-4 border-b text-center">
-                      {Math.round((target.achievement / target.target) * 100)}%
-                    </td>
-                  </tr>
-                ))}
+              <tbody className="divide-y divide-gray-100">
+                {allTargets.map((target, i) => {
+                  const percentage = Math.round(
+                    (target.achievement / target.target) * 100
+                  );
+                  return (
+                    <tr
+                      key={i}
+                      className="hover:bg-gray-50 transition duration-200"
+                    >
+                      <td className="py-3 px-6 whitespace-nowrap text-sm text-gray-800">
+                        {new Date(
+                          target.year,
+                          target.month - 1,
+                          1
+                        ).toLocaleString("default", {
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </td>
+                      <td className="py-3 px-6 text-sm text-gray-700">
+                        {target.target}
+                      </td>
+                      <td className="py-3 px-6 text-sm text-gray-700">
+                        {target.achievement}
+                      </td>
+                      <td
+                        className={`py-3 px-6 text-sm font-medium ${
+                          percentage >= 100
+                            ? "text-green-600"
+                            : percentage >= 70
+                            ? "text-yellow-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {percentage}%
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold mb-4">
+                Performance Over Time
+              </h3>
+              {allTargets.length > 0 ? (
+                <div className="h-80">
+                  <BarChart
+                    options={barChartData.options}
+                    series={barChartData.series}
+                    type="bar"
+                    height="100%"
+                  />
+                </div>
+              ) : (
+                <p className="text-gray-500">
+                  No data available for visualization
+                </p>
+              )}
+            </div>{" "}
           </div>
         ) : (
-          <p>No data available for selected period</p>
+          <p className="text-gray-500 text-center py-4">
+            No data available for selected period
+          </p>
         )}
       </div>
     </div>
