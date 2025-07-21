@@ -4,12 +4,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Modal from "./Modal";
 
 export default function UsersPage() {
+  const [isModalOpen, setModalOpen] = useState(false);
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isDeleting, setIsDeleting] = useState(null);
+  const [modalData, setModalData] = useState({});
   const router = useRouter();
 
   useEffect(() => {
@@ -94,7 +98,7 @@ export default function UsersPage() {
                   Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
+                  Phone
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Role
@@ -144,11 +148,21 @@ export default function UsersPage() {
                       className="text-red-600 hover:text-red-900"
                       onClick={() => {
                         // Handle delete
+
                         handleDelete(user._id);
                       }}
                     >
                       Delete
                     </button>
+                    {/* <button
+                      onClick={() => {
+                        setModalData(user),
+                        setModalOpen(true)
+                      }}
+                      // className="bg-blue-600 text-white px-4 py-2 rounded"
+                    >
+                      Open Modal
+                    </button> */}
                   </td>
                 </tr>
               ))}
@@ -168,6 +182,12 @@ export default function UsersPage() {
           </Link>
         </div>
       )}
+      <div className="p-6">
+        <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+          <h2 className="text-xl font-bold mb-4">Modal Title</h2>
+          <p>This is the content inside the modal.</p>
+        </Modal>
+      </div>
     </div>
   );
 }

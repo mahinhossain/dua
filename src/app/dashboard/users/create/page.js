@@ -60,11 +60,11 @@ export default function CreateUser() {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 mb-2" htmlFor="email">
-            Email
+            Phone
           </label>
           <input
             id="email"
-            type="email"
+            type="text"
             className="w-full px-3 py-2 border rounded-lg"
             value={formData.email}
             onChange={(e) =>
@@ -73,7 +73,7 @@ export default function CreateUser() {
             required
           />
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block text-gray-700 mb-2" htmlFor="role">
             Role
           </label>
@@ -86,7 +86,7 @@ export default function CreateUser() {
             <option value="user">User</option>
             <option value="admin">Admin</option>
           </select>
-        </div>
+        </div> */}
         <button
           type="submit"
           className={`w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 ${
