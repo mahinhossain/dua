@@ -73,8 +73,6 @@ export default function UserDetail({ params }) {
     setLoader(false);
   };
 
-  if (!user) return <div className="text-red-500">Loading...</div>;
-
   const currentMonthTarget = targets.find(
     (t) =>
       t.month == new Date().getMonth() + 1 && t.year == new Date().getFullYear()
@@ -109,7 +107,7 @@ export default function UserDetail({ params }) {
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: "15%",
+          columnWidth: "50%",
           endingShape: "rounded",
         },
       },
@@ -160,8 +158,17 @@ export default function UserDetail({ params }) {
       },
     ],
   };
+  if (!user)
+    return (
+      <div className="text-red-500">
+        {" "}
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+        </div>
+      </div>
+    );
   return (
-    <div className="p-6 text-black">
+    <div className="p-1 text-black">
       <h1 className="text-2xl font-bold mb-6">{user.name} Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -275,7 +282,7 @@ export default function UserDetail({ params }) {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="bg-white p-1 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">View Previous Months</h2>
         {/* <div className="flex gap-4 mb-6">
           <select
@@ -298,7 +305,6 @@ export default function UserDetail({ params }) {
             onChange={(e) => setSelectedYear(e.target.value)}
           />
         </div> */}
-
         {allTargets.length > 0 ? (
           <div className="overflow-x-auto rounded-lg shadow-md">
             <table className="min-w-full bg-white divide-y divide-gray-200">
@@ -311,10 +317,10 @@ export default function UserDetail({ params }) {
                     Target
                   </th>
                   <th className="py-3 px-6 text-sm font-semibold text-left">
-                    Achievement
+                    Achi
                   </th>
                   <th className="py-3 px-6 text-sm font-semibold text-left">
-                    Percentage
+                    %
                   </th>
                 </tr>
               </thead>
@@ -360,31 +366,27 @@ export default function UserDetail({ params }) {
                 })}
               </tbody>
             </table>
-            <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-4">
-                Performance Over Time
-              </h3>
-              {allTargets.length > 0 ? (
-                <div className="h-80">
-                  <BarChart
-                    options={barChartData.options}
-                    series={barChartData.series}
-                    type="bar"
-                    height="100%"
-                  />
-                </div>
-              ) : (
-                <p className="text-gray-500">
-                  No data available for visualization
-                </p>
-              )}
-            </div>{" "}
           </div>
         ) : (
           <p className="text-gray-500 text-center py-4">
             No data available for selected period
           </p>
         )}
+        <div className="mt-8">
+          <h3 className="text-lg font-semibold mb-4">Performance Over Time</h3>
+          {allTargets.length > 0 ? (
+            <div className="h-80">
+              <BarChart
+                options={barChartData.options}
+                series={barChartData.series}
+                type="bar"
+                height="100%"
+              />
+            </div>
+          ) : (
+            <p className="text-gray-500">No data available for visualization</p>
+          )}
+        </div>{" "}
       </div>
     </div>
   );

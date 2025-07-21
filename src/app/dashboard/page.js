@@ -115,10 +115,10 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50 p-1 md:p-8">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-blue-900">
             Performance Dashboard
           </h1>
           <p className="text-gray-600 mt-2">
@@ -220,7 +220,7 @@ export default function Dashboard() {
           </div>
 
           {/* Historical Data */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-black">
+          <div className="bg-blue-50 p-1 rounded-xl shadow-sm border border-blue-100 text-black">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-semibold text-gray-900">
                 Historical Performance
@@ -259,35 +259,35 @@ export default function Dashboard() {
             {selectedPeriodTargets.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-blue-50">
                     <tr>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider"
                       >
                         User
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider"
                       >
                         Target
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider"
                       >
                         Achievement
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider"
                       >
                         Progress
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-blue-50 divide-y divide-gray-200">
                     {selectedPeriodTargets.map((target, i) => {
                       const user = users.find((u) => u._id === target.userId);
                       const percentage = Math.round(
