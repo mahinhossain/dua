@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import admin from "firebase-admin";
-import serviceAccount from "../../../../serviceAccountKey.json"; // adjust path
 import dbConnect from "@/lib/mongodb";
 import { storeToken, getToken } from "@/services/FirebaseTokenService";
 
@@ -9,6 +8,20 @@ await dbConnect();
 
 // Initialize Firebase Admin only once
 if (!admin.apps.length) {
+  const serviceAccount = {
+    type: "service_account",
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID, // This may need to be added if you want it
+    private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"), // Fixing newline characters
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_AUTH_URI,
+    token_uri: process.env.FIREBASE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.FIREBASE_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
+    universe_domain: "googleapis.com",
+  };
+
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
@@ -16,9 +29,7 @@ if (!admin.apps.length) {
 
 export async function GET() {
   const token = await getToken();
-  // const tokens = token.map(item => item.token);
-  // return NextResponse.json(token)
-  
+
   const message = {
     token: token,
     notification: {
