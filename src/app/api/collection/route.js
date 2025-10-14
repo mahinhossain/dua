@@ -1,10 +1,8 @@
 import {
   getTargets,
-  getCollections,
   addTarget,
   getTargetsByUserAndMonth,
-  getCollectionsByUserAndMonth,
-} from "@/services/TargetService";
+} from "@/services/CollectionService";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
@@ -15,30 +13,12 @@ export async function GET(request) {
     const year = searchParams.get("year");
 
     const allTargets = await getTargets();
-    const allCollection = await getCollections();
-    let collection = await getCollectionsByUserAndMonth(userId, month, year);
-    let collectionSum = (userId, month, year) => {
-      return allCollection
-        .filter((ff) => ff.month == month && ff.userId == userId && ff.year == year)
-        .reduce((sum, item) => sum + parseInt(item.collection), 0);
-    };
-    const userTargets = allTargets
-      .filter((t) => t.userId === userId)
-      .map((ff) => ({
-        ...ff,
-        collection: collectionSum(ff.userId, ff.month, ff.year),
-      }));
-    // userTargets.map((ff) => ({
-    //   ...ff,
-    //   collection: collection,
-    // }));
+    const userTargets = allTargets.filter((t) => t.userId === userId);
     if (userId && month && year) {
       const targets = await getTargetsByUserAndMonth(userId, month, year);
-
       return NextResponse.json({
         currentTargets: targets,
         allTargets: userTargets,
-        collections: allCollection,
       });
     }
 

@@ -1,16 +1,10 @@
 import dbConnect from "@/lib/mongodb"; // or wherever you saved it
-import TargetModel from "../models/TargetModel";
-import CollectionModel from "../models/Collection";
+import TargetModel from "../models/Collection";
 
 export const getTargets = async () => {
   await dbConnect(); // ✅ Ensure DB connection
 
   return await TargetModel.find().lean();
-};
-export const getCollections = async () => {
-  await dbConnect(); // ✅ Ensure DB connection
-
-  return await CollectionModel.find();
 };
 
 export async function addTarget(target) {
@@ -20,8 +14,7 @@ export async function addTarget(target) {
     !target.userId ||
     !target.month ||
     !target.year ||
-    target.target === undefined ||
-    target.achievement === undefined
+    target.collection === undefined
   ) {
     throw new Error("Missing required target fields");
   }
@@ -39,27 +32,23 @@ export async function addTarget(target) {
     updatedAt: now,
   };
 
-  // Use upsert: true to insert if not exist or update if exists
-  const updatedTarget = await TargetModel.findOneAndUpdate(filter, update, {
-    new: true,
-    upsert: true,
-    setDefaultsOnInsert: true,
+  const collection = new TargetModel({
+    ...update,
   });
+  return await collection.save();
 
-  return updatedTarget;
+  // Use upsert: true to insert if not exist or update if exists
+  // const updatedTarget = await TargetModel.Cre(filter, update, {
+  //   new: true,
+  //   upsert: true,
+  //   setDefaultsOnInsert: true,
+  // });
+
+  // return updatedTarget;
 }
 
 export const getTargetsByUserAndMonth = async (userId, month, year) => {
   const targets = await getTargets();
-  return targets?.filter(
-    (t) =>
-      t.userId === userId &&
-      t.month === parseInt(month) &&
-      t.year === parseInt(year)
-  );
-};
-export const getCollectionsByUserAndMonth = async (userId, month, year) => {
-  const targets = await getCollections();
   return targets?.filter(
     (t) =>
       t.userId === userId &&

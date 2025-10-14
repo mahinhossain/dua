@@ -43,12 +43,12 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  const currentMonthTargets = targets.filter(
+  const currentMonthTargets = targets?.filter(
     (t) =>
       t.month == new Date().getMonth() + 1 && t.year == new Date().getFullYear()
   );
 
-  const selectedPeriodTargets = targets.filter(
+  const selectedPeriodTargets = targets?.filter(
     (t) => t.month == selectedMonth && t.year == selectedYear
   );
 
