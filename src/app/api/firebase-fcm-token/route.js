@@ -48,7 +48,7 @@ export async function GET() {
 
   try {
     const response = await admin.messaging().send(message);
-    console.log("✅ Successfully sent message:", response);
+    console.log(" Successfully sent message:", response);
 
     return NextResponse.json({
       success: true,
@@ -56,7 +56,7 @@ export async function GET() {
       response,
     });
   } catch (error) {
-    console.error("❌ Error sending message:", error);
+    console.error("Error sending message:", error);
 
     return NextResponse.json({
       success: false,
