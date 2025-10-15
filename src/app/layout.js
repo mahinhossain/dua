@@ -8,10 +8,8 @@ import { messaging } from "../../lib/firebaseConfig";
 import { getToken } from "firebase/messaging";
 import axios from "axios";
 export default function RootLayout({ children }) {
-  const [token1, setToken] = useState(null);
-
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
+    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
           .register("/service-worker.js")
@@ -19,15 +17,14 @@ export default function RootLayout({ children }) {
           .catch((err) => console.error("SW registration failed:", err));
       });
     }
+
     // Request permission for push notifications
     const requestPermission = async () => {
       try {
         const token = await getToken(messaging, {
-          vapidKey:
-            "BHQnmhNYr-dBETQN0GtZZyk4aB9ZxRyx-JivXBsyIC_fE_MlmFNnUUmvAooM21tuGwY9aTnn0FoQfG_pr4CusIs", // Public key for Web Push
+          vapidKey:process.env.KEY_PAIR,
         });
         console.log(token);
-        // setToken(token);
         if (token) {
           const res = await axios.post("/api/firebase-fcm-token", { token });
           console.log("res :>> ", res);
@@ -37,8 +34,11 @@ export default function RootLayout({ children }) {
       }
     };
 
-    requestPermission();
+    if (typeof window !== "undefined") {
+      requestPermission();
+    }
   }, []);
+
   return (
     <html lang="en">
       <Head>
